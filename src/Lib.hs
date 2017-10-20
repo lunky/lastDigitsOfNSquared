@@ -4,6 +4,7 @@ module Lib
       ,green'
       ,test
       ,testGreen
+      ,len
     ) where
 
 import Data.List
@@ -17,9 +18,10 @@ testGreen :: Integer -> Bool
 testGreen 1 = True 
 testGreen 5 = True
 testGreen 6 = True
-testGreen n = ((lastTwo == 25 && lastTwo' == 25) || (lastTwo == 76 && lastTwo' == 76))  && (show n) `isSuffixOf` (show $ n^2)
-  where   lastTwo = (n) `mod` 100
-          lastTwo' = (n^2) `mod` 100
+testGreen n = (show n) `isSuffixOf` (show $ n^2)
+--testGreen n = (n == lastTwo')  -- && (show n) `isSuffixOf` (show $ n^2)
+--  where   lastTwo' = (n^2) `mod` (10^lengthOfN)
+--          lengthOfN = len n
 
 --greenGen Integer = testGreen num 
 test :: [Integer] -> [Integer]
@@ -29,7 +31,12 @@ green :: Int -> Integer
 green n = head $ drop (n-1) $  green' n
 
 {-green' :: Int -> [Integer]-}
-green' n = take n $ filter (\y -> testGreen y) [1..]
+green' n = take n $ filter (\y -> testGreen y) [1..]--(seriesGenerator)
+
+seriesGenerator = [1,5,6,25,76] ++ foldr (\y acc -> y+25:(y+76:acc) )  []  [100,200..] 
+
+len:: (Integral a, Integral a1) => a1 -> a
+len n = floor(logBase 10 ( fromIntegral ( abs n ))) + 1
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
