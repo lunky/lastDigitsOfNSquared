@@ -2,7 +2,6 @@ module Lib
     ( someFunc
       ,green
       ,green'
-      ,test
       ,testGreen
       ,len
       ,seriesGenerator
@@ -11,13 +10,8 @@ module Lib
 import Data.List
 
 testGreen :: Integer -> Bool
-testGreen 1 = True 
-testGreen 5 = True
-testGreen 6 = True
-testGreen n = (show n) `isSuffixOf` (show $ n^2)
-
-test :: [Integer] -> [Integer]
-test n = take 5 n
+--testGreen n = (show n) `isSuffixOf` (show $ n^2)
+testGreen n = n^2 `mod` (len n) == 0
 
 green :: Int -> Integer
 green n = head $ drop (n-1) $  green' n
@@ -27,12 +21,11 @@ green' n = take n (seriesGenerator)
 
 seriesGenerator :: [Integer]
 seriesGenerator = 1 : merge (next 6) (next 5)
-
-next n 
-  | testGreen n == True  = n : next (magnitude n)
-  | otherwise = next (inc n)
-  where magnitude x = x + 10 ^ (len n)
-        inc x = x + 10 ^ (len n-1)
+  where  next n 
+          | testGreen n == True  = n : next (magnitude n)
+          | otherwise = next (inc n)
+            where magnitude x = x + 10 ^ (len n)
+                  inc x = x + 10 ^ (len n-1)
 
 merge :: (Ord a) => [a] -> [a] -> [a]
 merge (a:as) (b:bs)
